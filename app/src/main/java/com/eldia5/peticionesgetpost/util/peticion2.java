@@ -15,25 +15,23 @@ import java.util.Vector;
 
 public class peticion2 extends AsyncTask<JSONObject, Integer, JSONObject> {
     onTerremotosObtenidos callerActivity;
-
     public void setCallerActivity(onTerremotosObtenidos callerActivity) {
         this.callerActivity = callerActivity;
     }
-
     @Override
     protected JSONObject doInBackground(JSONObject... jsonObjects) {
-        return network.doGetCall("http://api.geonames.org/earthquakesJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&username=demo","",10500,new JSONObject());
+        return network.doGetCall("http://api.geonames.org/weatherJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&username=rigobono40","",10500,new JSONObject());
     }
 
     @Override
     protected  void onPostExecute(JSONObject result){
         Log.i("RESULTADO",result.toString());
         try {
-            JSONArray postalCodes=result.getJSONArray("earthquakes");
+            JSONArray postalCodes=result.getJSONArray("weatherObservations");
             Vector<String> data=new Vector<String>();
             for(int i=0;i<postalCodes.length();i++){
                 JSONObject jo=postalCodes.getJSONObject(i);
-                data.add(jo.getString("datetime"));
+                data.add(jo.getString("stationName"));
             }
             callerActivity.terremtos(data);
         } catch (JSONException e) {
@@ -43,5 +41,4 @@ public class peticion2 extends AsyncTask<JSONObject, Integer, JSONObject> {
     public interface  onTerremotosObtenidos{
         public void terremtos(Vector<String> dates);
     }
-
 }
